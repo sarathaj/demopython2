@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if catagory %}
+       {{ catagory.description|truncatewords:155 }}
+    {% else %}
+        Welcome to Abc store where you can buy different items....
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if catagory %}
+       {{ catagory.name }} - Abc store
+    {% else %}
+        See our new collections -Abc store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if catagory %}
+    <div class="container">
+        <div class="row my_row_class">
+            <div class="mx-auto">
+            <p><a href="{% url 'shop:allProdCat' %}">Our product collection</a></p>
+        </div>
+            </div>
+    </div>
+{% endif %}
+<div class="mx_auto">
+    {% if catagory %}
+    <img class="my_image" src="{{catagory.image.url}}" alt="{{catagory.name}}">
+</div>
+  <br>
+<div>
+    <h1 class="text-center my_title">{{catagory.name}}</h1>
+    <p class="text-justify">{{catagory.description}}</p>
+</div>
+    {% else %}
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="our products">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title ">our product collections</h1>
+    <p class="text-justify">No matter the size of your online store, product descriptions play a key role in your ecommerce business.
+
+Effective product descriptions can possibly lure potential customers. Good product descriptions can potentially influence a purchase decision. Great product descriptions can ultimately help improve conversion rates and increase sales, as well as boost your visibility and SEO on paid channels.
+
+The technical details, including the use of power words and A/B tests, can be the difference between a potential buyer on your ecommerce website and those customers shopping at a competitor with similar products.
+
+Business owners, marketers and copywriters all know the importance of writing product descriptions, but what’s the best way to help reach your target audience
+</p>
+
+</div>
+     {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-12 col-sm-3 col-md-3 col-md-3 col-lg-4">
+            <div class="card text-center " style=" min-width:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image " src="{{product.image.url}}" alt="{{product.name}}"></a>
+                <div class="card-body">
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.type}}</p>
+                    <p>${{product.price}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+       {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text_center">
+            {% for pg in products.paginator.page_range %}
+            <a  href="?page={{pg}}"  class="btn btn-light btn-sm   {% if products.number == pg %} active {% endif %}">{{pg}} </a>
+           {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+    <br>
+</div>
+{% endblock %}
+
